@@ -2,7 +2,12 @@
     <string name="app_name">TestTabs</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_one_fragment">Hello one fragment</string>
-    <string name="hello_two_fragment">Hello two fragment</string>
-    <string name="Start">Start</string>
+    <string name="hello_one_fragment">Ping</string>
+    <string name="hello_two_fragment">Download</string>
+    <string name="hello_three_fragment">Upload</string>
+    <string name="hello_four_fragment">Web</string>
+    <string name="hello_five_fragment">Video</string>
+    <string name="Start">Start Tests</string>
+    <string name="go_to_results">Go to Results</string>
+
 </resources>
