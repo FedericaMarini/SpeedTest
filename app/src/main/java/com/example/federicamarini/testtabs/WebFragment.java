@@ -12,14 +12,14 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-public class FourFragment extends Fragment {
+public class WebFragment extends Fragment {
     private String linkWebTest;
     private int timeOutWebTest;
     private int timeElapsed;
     private TextView messageText;
 
 
-    public FourFragment() {
+    public WebFragment() {
         // Required empty public constructor
         this.linkWebTest = "http://www.fub.it";
         this.timeOutWebTest = 10000;

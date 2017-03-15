@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.federicamarini.testtabs.ResultFragment">
+    <Button
+        android:id="@+id/ResultButton"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:text="@string/Result"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/RerunButton"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:text="@string/Rerun"
+        android:layout_marginTop="400dp"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

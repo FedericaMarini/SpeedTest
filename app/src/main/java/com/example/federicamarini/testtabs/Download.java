@@ -48,10 +48,10 @@ public class Download {
                         int bytesRead = 0;
                         Stopwatch timer = new Stopwatch();
                         while ((read = bufferedInputStream.read(buffer, 0, 512)) != -1 && timer.elapsedTime()<1000){
-                            bytesRead ++;
+                            bytesRead +=read;
                         }
-                        Log.d("Download", "Byte letti: " +bytesRead*512);
-                        resultsDownload[i] = bytesRead*512;
+                        Log.d("Download", "Byte letti: " +bytesRead);
+                        resultsDownload[i] = bytesRead;
 
                     } catch (IOException e) {
                         e.printStackTrace();

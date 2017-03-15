@@ -9,19 +9,12 @@ public class AppendFiles {
     private Upload upload;
     private int[] webResult;
 
-    public AppendFiles(Ping pin, Download dl, Upload upl, int[] web){
-        this.ping = pin;
-        this.download = dl;
-        this.webResult = web;
-        this.upload = upl;
 
-    }
-
-    public int[] AppendFiles() {
+    public int[] AppendResults() {
         try {
-            ping.getResultsPing();
-            download.getResultsDownload();
-            upload.getResultsUpload();
+            //ping.getResultsPing();
+            //download.getResultsDownload();
+            //upload.getResultsUpload();
 
             arrayFinale = concatenaArray(ping.getResultsPing(), download.getResultsDownload(),
                     upload.getResultsUpload(), webResult);

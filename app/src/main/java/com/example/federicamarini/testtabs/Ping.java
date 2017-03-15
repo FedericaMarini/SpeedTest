@@ -1,26 +1,66 @@
 package com.example.federicamarini.testtabs;
 
-import android.os.Bundle;
+import android.app.ProgressDialog;
+
+import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import java.net.Socket;
 
-public class Ping {
+public class Ping extends AsyncTask<String, Integer, String> {
     private String linkPingTest;
     private int portPingTest;
     private int intervalPingTest;
     private int[] resultsPing;
     private Operations operations;
+    private Context context;
+    private ProgressDialog progressDialog;
+    private Callback callback;
 
-    public Ping() throws Exception {
-        this.linkPingTest = ("193.104.137.133");
+    public Ping(Context context) throws Exception {
+        this.context = context;
+        this.linkPingTest = ("193.104.137.133");//193.104.137.133
         this.portPingTest = 80;
         this.intervalPingTest = 10;
         this.resultsPing = new int[intervalPingTest];
         this.operations = new Operations();
     }
 
-    public void RunPingTest() {
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
 
+    @Override
+    protected void onPreExecute() {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Caricamento...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    @Override
+    protected String doInBackground(String... strings) {
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        if (progressDialog != null) progressDialog.dismiss();
+        if (callback != null) {
+            if (s == null) {
+                callback.onError();
+            } else {
+                callback.onSuccess(s);
+            }
+        }
+    }
+
+    public interface Callback {
+        void onSuccess(String data);
+        void onError();
+    }
+
+    public void RunPingTest() {
         Socket socket;
         for (int i = 0; i < intervalPingTest; i++) {
             try {

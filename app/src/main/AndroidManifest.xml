@@ -28,13 +28,14 @@
         </activity>
         <activity
             android:name=".SecondActivity"
-            android:label="Seconda Activity">
+            android:label="SpeedTest 5G">
             <intent-filter>
                 <action android:name="android.intent.action.SecondActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ThirdActivity"></activity>
     </application>
 
 </manifest>

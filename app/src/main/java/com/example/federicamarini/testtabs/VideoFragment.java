@@ -13,7 +13,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public class FiveFragment extends Fragment {
+public class VideoFragment extends Fragment {
     private String linkVideoTest;
     private int timeOutVideoTest = 240000; //in ms
     private VideoView myVideoView;
@@ -22,12 +22,10 @@ public class FiveFragment extends Fragment {
     private int cont;
     private int[] resultsVideo;
     private TextView messageText;
-    private TextView messageText2;
     private double time;
-    private double timeBuffer;
 
 
-    public FiveFragment() {
+    public VideoFragment() {
         // Required empty public constructor
         this.linkVideoTest = "http://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
         this.timeOutVideoTest = 240000; //in ms
@@ -54,10 +52,13 @@ public class FiveFragment extends Fragment {
         myVideoView = (VideoView) getView().findViewById(R.id.videoview);
         this.messageText = (TextView) getView().findViewById(R.id.messageText);
 
+
+
         final Stopwatch timer = new Stopwatch();
         try {
             Uri uriVideo = Uri.parse(linkVideoTest);
             myVideoView.setVideoURI(uriVideo);
+
         } catch (Exception e) {
             messageText.setText("Fallimento apertura video");
             Log.d("VIDEO ACTIVITY", "Fallimento apertura video");
@@ -67,12 +68,19 @@ public class FiveFragment extends Fragment {
         myVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(final MediaPlayer mediaPlayer) {
                 myVideoView.start();
+                if (mediaController == null){
+                    mediaController = new MediaController(getContext());
+                }
+                mediaController.setAnchorView(myVideoView);
+                myVideoView.setMediaController(mediaController);
+
                 time = timer.elapsedTime();
 
                 if (time < timeOutVideoTest){
                     Log.d("VIDEO ACTIVITY", "Tempo trascorso apertura video: " +time+ "ms");
                     messageText.setText("First frame: "+time+ " ms");
                 }
+                else messageText.setText("Timeout");
                 mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                     boolean fin = false;
                     @Override
@@ -98,7 +106,6 @@ public class FiveFragment extends Fragment {
             }
 
         });
-
     }
 
     private void finito(int results[]) {

@@ -37,6 +37,5 @@ public class SaveCSV {
 
     public static File getPath(String fileName){
         return new File(Environment.getExternalStorageDirectory(), fileName);
-
     }
 }

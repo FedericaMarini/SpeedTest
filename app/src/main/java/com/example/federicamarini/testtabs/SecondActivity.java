@@ -8,20 +8,29 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SecondActivity extends AppCompatActivity {
+public class SecondActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int[] tabIcons = {R.mipmap.ic_ping, R.mipmap.ic_download, R.mipmap.ic_upload, R.mipmap.ic_web, R.mipmap.ic_video};
+
+    private int[] tabIcons = {R.mipmap.ic_ping, R.mipmap.ic_download, R.mipmap.ic_upload,
+            R.mipmap.ic_web, R.mipmap.ic_video, R.mipmap.ic_results};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+        Log.d("Seconda Activity", "onCreate");
+    }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -34,10 +43,19 @@ public class SecondActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+        Log.d("Seconda Activity", "onStart");
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
+        Log.d("Seconda Activity", "onResume");
     }
 
     private void setupTabIcons() {
@@ -46,17 +64,21 @@ public class SecondActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(4).setIcon(tabIcons[4]);
-
+        tabLayout.getTabAt(5).setIcon(tabIcons[5]);
     }
 
     private void setupViewPager(ViewPager viewPager) throws Exception {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "Ping");
-        adapter.addFragment(new TwoFragment(), "Download");
-        adapter.addFragment(new ThreeFragment(), "Upload");
-        adapter.addFragment(new FourFragment(), "Web");
-        adapter.addFragment(new FiveFragment(), "Video");
+        PingFragment pf = new PingFragment();
+        DownloadFragment df = new DownloadFragment();
 
+
+        adapter.addFragment(pf);
+        adapter.addFragment(df);
+        adapter.addFragment(new UploadFragment());
+        adapter.addFragment(new WebFragment());
+        adapter.addFragment(new VideoFragment());
+        adapter.addFragment(new ResultFragment());
         viewPager.setAdapter(adapter);
     }
 
@@ -78,8 +100,12 @@ public class SecondActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void addFragment(Fragment fragment) {
             mFragmentList.add(fragment);
+            //mFragmentTitleList.add(title);
+        }
+
+        public void addName(String title){
             mFragmentTitleList.add(title);
         }
 
