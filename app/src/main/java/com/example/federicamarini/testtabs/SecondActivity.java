@@ -2,60 +2,42 @@ package com.example.federicamarini.testtabs;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SecondActivity extends AppCompatActivity{
+public class SecondActivity extends AppCompatActivity implements testsCallback {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
     private int[] tabIcons = {R.mipmap.ic_ping, R.mipmap.ic_download, R.mipmap.ic_upload,
             R.mipmap.ic_web, R.mipmap.ic_video, R.mipmap.ic_results};
+    private SaveCSV saveCSV = new SaveCSV();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-        Log.d("Seconda Activity", "onCreate");
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         try {
             setupViewPager(viewPager);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        Log.d("Seconda Activity", "onStart");
-
     }
 
+
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onStart(){
+        super.onStart();
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        Log.d("Seconda Activity", "onResume");
     }
 
     private void setupTabIcons() {
@@ -69,12 +51,8 @@ public class SecondActivity extends AppCompatActivity{
 
     private void setupViewPager(ViewPager viewPager) throws Exception {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        PingFragment pf = new PingFragment();
-        DownloadFragment df = new DownloadFragment();
-
-
-        adapter.addFragment(pf);
-        adapter.addFragment(df);
+        adapter.addFragment(new PingFragment());
+        adapter.addFragment(new DownloadFragment());
         adapter.addFragment(new UploadFragment());
         adapter.addFragment(new WebFragment());
         adapter.addFragment(new VideoFragment());
@@ -82,37 +60,47 @@ public class SecondActivity extends AppCompatActivity{
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+    @Override
+    public void getRisultatiPing(int[] array) {
+        for(int i = 0; i<array.length; i++) {
+            Log.d("Seconda Activity", "Ping: " + array[i]);
         }
+        saveCSV.salvaRisultati(array);
+    }
 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+    @Override
+    public void getRisultatiDownload(int[] array) {
+        for (int i = 0; i< array.length; i++){
+            Log.d("Seconda Activity", "Download: "+array[i]);
         }
+        saveCSV.salvaRisultati(array);
+    }
 
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
+    @Override
+    public void getRisultatiUpload(int[] array) {
+        for (int i=0; i<array.length; i++){
+            Log.d("Seconda Activity", "Upload: "+array[i]);
         }
+        saveCSV.salvaRisultati(array);
+    }
 
-        public void addFragment(Fragment fragment) {
-            mFragmentList.add(fragment);
-            //mFragmentTitleList.add(title);
-        }
+    @Override
+    public void getRisultatoWeb(int a) {
+        Log.d("Seconda Activity", "Web: "+a);
+        saveCSV.salvaRisultati(new int[] {a});
+    }
 
-        public void addName(String title){
-            mFragmentTitleList.add(title);
-        }
+    @Override
+    public void getFirstFrame(int a) {
+        Log.d("Seconda Activity", "Video: "+a);
+        saveCSV.salvaRisultati(new int[] {a});
+    }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            //return mFragmentTitleList.get(position);
-            return null;
+    @Override
+    public void getRisultatiVideo(int[] array) {
+        for (int i=0; i<array.length; i++){
+            Log.d("Seconda Activity", "Video Buffer: "+array[i]);
         }
+        saveCSV.salvaRisultati(array);
     }
 }

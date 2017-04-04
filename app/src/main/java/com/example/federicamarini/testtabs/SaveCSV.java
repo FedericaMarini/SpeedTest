@@ -1,6 +1,7 @@
 package com.example.federicamarini.testtabs;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,11 +24,14 @@ public class SaveCSV {
 
     public void salvaRisultati (int[] array) {
         try {
-            file.createNewFile();
+            //file.createNewFile();
             String s = "";
             for (int i = 0; i < array.length; i++) {
                 s = s + array[i] + ",";
             }
+            long fileLength = randomAccessFile.length();
+            Log.d("SaveCSV", "Salva risultati: "+fileLength);
+            randomAccessFile.seek(fileLength);
             randomAccessFile.writeBytes(s);
             randomAccessFile.writeBytes("\n");
         } catch (IOException e) {

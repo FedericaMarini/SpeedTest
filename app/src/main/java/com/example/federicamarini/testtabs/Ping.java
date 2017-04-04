@@ -1,64 +1,55 @@
 package com.example.federicamarini.testtabs;
 
 import android.app.ProgressDialog;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import java.net.Socket;
 
-public class Ping extends AsyncTask<String, Integer, String> {
+public class Ping extends AsyncTask<Void, Void, Boolean>{
     private String linkPingTest;
     private int portPingTest;
     private int intervalPingTest;
     private int[] resultsPing;
     private Operations operations;
-    private Context context;
     private ProgressDialog progressDialog;
-    private Callback callback;
+    Context context;
+    public AsyncResponse asyncResponse;
 
-    public Ping(Context context) throws Exception {
-        this.context = context;
+
+    public Ping(Context context){
         this.linkPingTest = ("193.104.137.133");//193.104.137.133
         this.portPingTest = 80;
         this.intervalPingTest = 10;
         this.resultsPing = new int[intervalPingTest];
         this.operations = new Operations();
-    }
-
-    public void setCallback(Callback callback) {
-        this.callback = callback;
+        this.context = context;
+        this.asyncResponse = null;
     }
 
     @Override
     protected void onPreExecute() {
+        Log.d("Download", "onPreExecute");
         progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Caricamento...");
+        progressDialog.setMessage("In progress...");
+        progressDialog.setTitle("Ping");
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
     @Override
-    protected String doInBackground(String... strings) {
-        return null;
+    protected Boolean doInBackground(Void... voids) {
+        Log.d("Download", "doInBackground");
+        RunPingTest();
+        return true;
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(Boolean s) {
         if (progressDialog != null) progressDialog.dismiss();
-        if (callback != null) {
-            if (s == null) {
-                callback.onError();
-            } else {
-                callback.onSuccess(s);
-            }
-        }
+        asyncResponse.processFinish(s);
     }
 
-    public interface Callback {
-        void onSuccess(String data);
-        void onError();
-    }
 
     public void RunPingTest() {
         Socket socket;

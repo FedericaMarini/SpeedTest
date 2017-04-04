@@ -1,5 +1,9 @@
 package com.example.federicamarini.testtabs;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -9,21 +13,50 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Download {
+public class Download extends AsyncTask <Void, Void, Boolean> {
     private String linkDownload;
     private int intervalDownload;
     private int[] resultsDownload;
     private Operations operations;
+    private ProgressDialog progressDialog;
+    Context context;
+    public AsyncResponse asyncResponse;
 
-    public Download(){
+    public Download(Context context){
         this.linkDownload = "https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet.mp4"; //dropbox
         this.intervalDownload = 10;
         this.resultsDownload = new int[intervalDownload];
         this.operations = new Operations();
+        this.context = context;
+        this.asyncResponse = null;
+    }
+
+
+    @Override
+    protected void onPreExecute() {
+        Log.d("Download", "onPreExecute");
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("In progress...");
+        progressDialog.setTitle("Download");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... voids) {
+        Log.d("Download", "doInBackground");
+        RunDownload();
+        return true;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean s) {
+        Log.d("Download", "onPostExecute");
+        if (progressDialog != null) progressDialog.dismiss();
+        asyncResponse.processFinish(s);
     }
 
     public void RunDownload(){
-
         //http connection
         URL url = null;
         try {

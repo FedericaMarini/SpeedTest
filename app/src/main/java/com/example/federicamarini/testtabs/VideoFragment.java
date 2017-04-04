@@ -1,5 +1,6 @@
 package com.example.federicamarini.testtabs;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -21,8 +22,12 @@ public class VideoFragment extends Fragment {
     private int contentLength;
     private int cont;
     private int[] resultsVideo;
+    private int[] arrayRisultatiCompleto;
     private TextView messageText;
-    private double time;
+    private int time;
+    testsCallback callback;
+    private int numeroValori;
+    private ProgressDialog progressDialog;
 
 
     public VideoFragment() {
@@ -31,28 +36,34 @@ public class VideoFragment extends Fragment {
         this.timeOutVideoTest = 240000; //in ms
         this.contentLength = 5728124;
         this.cont = 0;
-        this.resultsVideo = new int[50];
+        this.numeroValori = 0;
+        this.resultsVideo = new int[200];
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_five, container, false);
+        View view = inflater.inflate(R.layout.fragment_five, container, false);
+        return view;
     }
 
     @Override
     public void onStart(){
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("In progress...");
+        progressDialog.setTitle("Streaming Video");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         super.onStart();
         myVideoView = (VideoView) getView().findViewById(R.id.videoview);
         this.messageText = (TextView) getView().findViewById(R.id.messageText);
-
-
 
         final Stopwatch timer = new Stopwatch();
         try {
@@ -79,6 +90,7 @@ public class VideoFragment extends Fragment {
                 if (time < timeOutVideoTest){
                     Log.d("VIDEO ACTIVITY", "Tempo trascorso apertura video: " +time+ "ms");
                     messageText.setText("First frame: "+time+ " ms");
+                    callback.getFirstFrame(time);
                 }
                 else messageText.setText("Timeout");
                 mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
@@ -95,9 +107,22 @@ public class VideoFragment extends Fragment {
                         }
                         else
                         {
+                            progressDialog.dismiss();
                             if(!fin) {
                                 finito(resultsVideo);
                                 fin = true;
+                                for(int i = 0; i<resultsVideo.length; i++){
+                                    if(resultsVideo[i]>0){
+                                        numeroValori++;
+                                    }
+                                }
+                                arrayRisultatiCompleto = new int[numeroValori+1];
+                                for (int j=0; j<resultsVideo.length; j++) {
+                                    if (resultsVideo[j] > 0) {
+                                        arrayRisultatiCompleto[j] = resultsVideo[j];
+                                    }
+                                }
+                                callback.getRisultatiVideo(arrayRisultatiCompleto);
                             }
                         }
 
@@ -108,10 +133,17 @@ public class VideoFragment extends Fragment {
         });
     }
 
+
+
     private void finito(int results[]) {
         cont ++;
         results[cont] = contentLength;
         Log.d("VIDEO ACTIVITY", "ARRAY FINITO: " + cont + " " + results[cont] + " Bytes");
+    }
+
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        callback = (testsCallback) activity;
     }
 
 }

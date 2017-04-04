@@ -18,9 +18,9 @@ public class ResultFragment extends Fragment {
     private Button resultButton;
     private Button rerunButton;
     private AppendFiles appendFiles = new AppendFiles();
+
     public ResultFragment() {
         // Required empty public constructor
-
     }
 
     @Override
@@ -47,8 +47,6 @@ public class ResultFragment extends Fragment {
                 intent.setType("application/vnd.ms-excel");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);*/
-                appendFiles.AppendResults();
-
             }
         });
 
